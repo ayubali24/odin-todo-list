@@ -13,6 +13,7 @@
                     <th>Description</th>
                     <th>Due Date</th>
                     <th>Priority</th>
+                    <th>Project</th>
                 </tr>
             </thead>
            
@@ -38,9 +39,22 @@
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
                 </select>
+
+                <label for="project-list">Project:</label>
+                <select id="project-list" name="project-list">
+                    <!-- <option value="default" selected>Default</option> -->
+                </select>
                 <button type="submit" class="btn">Submit</button>
                 
             </fieldset>
+           
+        </form>
+        <form class="create-project-container">
+        <fieldset>
+            <label for="new-project">Project Name:</label>
+            <input type="text" id="new-project" name="new-project" />
+            <button type="button" id="new-project-button">Create a new project</button>
+        </fieldset>
         </form>
     </div>
 </body>
