@@ -1,5 +1,6 @@
 import { displayToDoItems } from "./updateDisplay.js";
 import { projects } from "./projectsTracker.js";
+import { groupToDosByProject } from "./projectsTracker.js";
 
 export const todos = [];
 
@@ -30,6 +31,9 @@ form.addEventListener("submit", (e) => {
     console.log('hey entries', objWithIdIndex);
     addToDoToList(entries.title, entries.description, entries.date, entries.priority, projects[objWithIdIndex].name);
     displayToDoItems();
+    groupToDosByProject(projects);
+    console.log(projects);
+
 })
 
 export function removeObjectWithId(arr, id) {

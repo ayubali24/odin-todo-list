@@ -1,5 +1,6 @@
 import { todos } from "./todos-tracker.js";
 import { removeObjectWithId } from "./todos-tracker.js";
+import { projects } from "./projectsTracker.js";
 
 const myTable = document.getElementById("myTable");
 const tbody = myTable.createTBody();
@@ -48,5 +49,11 @@ export function displayToDoItems() {
         // row.appendChild(changeReadStatusButton);
         row.appendChild(cell6);
         tbody.appendChild(row);
+        console.log('hey my projects', projects);
+        
+
+
     }
 }
+
+// console.log('hey my todos', todos);

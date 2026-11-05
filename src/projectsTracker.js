@@ -1,10 +1,9 @@
 // keep track of projects, create new projects, delete projects?
-
+import { todos } from "./todos-tracker.js";
 export const projects = [
     {
         id: crypto.randomUUID(),
         name: "Default",
-        // todos: some function that grabs default
     }
 ];
 
@@ -45,4 +44,10 @@ export function updateProjectListDrop() {
 
 const newProjectButton = document.querySelector("#new-project-button");
 
-newProjectButton.addEventListener("click", addProjectToList)
+newProjectButton.addEventListener("click", addProjectToList);
+
+export function groupToDosByProject(projects) {
+    projects.forEach((item) => {
+        item.todos = todos.filter(user => user.project == item.name)
+    })
+}
