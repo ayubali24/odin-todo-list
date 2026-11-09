@@ -33,7 +33,17 @@ function addProjectToList(projectName) {
 };
 
 const projectList = document.querySelector("#project-list");
+const navBar = document.querySelector("nav");
 
+function addProjectToNavBar() {
+    navBar.replaceChildren();
+    projects.forEach((item) => {
+        const newButton = document.createElement("button");
+        newButton.textContent = item.name;
+        newButton.id = item.id;
+        navBar.appendChild(newButton);
+    })
+}
 
 export function updateProjectListDrop() {
     projectList.replaceChildren();
@@ -44,7 +54,10 @@ export function updateProjectListDrop() {
 
 const newProjectButton = document.querySelector("#new-project-button");
 
-newProjectButton.addEventListener("click", addProjectToList);
+newProjectButton.addEventListener("click", () => {
+    addProjectToList();
+    addProjectToNavBar();
+})
 
 export function groupToDosByProject(projects) {
     projects.forEach((item) => {

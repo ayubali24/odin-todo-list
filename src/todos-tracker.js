@@ -1,7 +1,7 @@
-import { displayToDoItems } from "./updateDisplay.js";
 import { projects } from "./projectsTracker.js";
 import { groupToDosByProject } from "./projectsTracker.js";
-
+import { displayToDoItems } from "./updateDisplay.js";
+import { currentView } from "./updateDisplay.js";
 export const todos = [];
 
 class toDo {
@@ -28,11 +28,12 @@ form.addEventListener("submit", (e) => {
     const entries = Object.fromEntries(data.entries());
     const objWithIdIndex = projects.findIndex((obj) => obj.id === entries["project-list"]);
 
-    console.log('hey entries', objWithIdIndex);
     addToDoToList(entries.title, entries.description, entries.date, entries.priority, projects[objWithIdIndex].name);
-    displayToDoItems();
+    // displayToDoItems();
     groupToDosByProject(projects);
-    console.log(projects);
+    if (currentView == projects[objWithIdIndex].name) {
+        displayToDoItems(projects[objWithIdIndex]);
+    }
 
 })
 

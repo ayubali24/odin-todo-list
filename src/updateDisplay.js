@@ -1,11 +1,21 @@
-import { todos } from "./todos-tracker.js";
 import { removeObjectWithId } from "./todos-tracker.js";
 import { projects } from "./projectsTracker.js";
 
 const myTable = document.getElementById("myTable");
 const tbody = myTable.createTBody();
+export let currentView = "Default";
 
-export function displayToDoItems() {
+const navBar = document.querySelector("nav");
+navBar.addEventListener("click", (e) => {
+    const project = projects.find(project => project.name === e.target.textContent);
+    currentView = project.name;
+
+    displayToDoItems(project);
+})
+
+
+export function displayToDoItems(project) {
+    const todos = project.todos;
     tbody.replaceChildren();
 
     for (const item of todos) {
@@ -24,8 +34,6 @@ export function displayToDoItems() {
         cell4.textContent = item.priority;
         cell5.textContent = item.project;
 
-
-        // 4. Append row to tbody
         row.appendChild(cell1);
         row.appendChild(cell2);
         row.appendChild(cell3);
@@ -40,20 +48,11 @@ export function displayToDoItems() {
 
 
         myDeleteButton.addEventListener('click', () => {
-            console.log('u have entered me');
             removeObjectWithId(todos, item.id)
-            displayToDoItems();
+            displayToDoItems(project);
         });
 
-        // row.appendChild(myDeleteButton);
-        // row.appendChild(changeReadStatusButton);
         row.appendChild(cell6);
         tbody.appendChild(row);
-        console.log('hey my projects', projects);
-        
-
-
     }
 }
-
-// console.log('hey my todos', todos);
