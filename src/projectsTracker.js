@@ -1,41 +1,34 @@
 // keep track of projects, create new projects, delete projects?
-import { todos } from "./todos-tracker.js";
+import { updateProjectInLocalStorage } from "./localStorageTracker.js";
 export const projects = [
     {
         id: crypto.randomUUID(),
         name: "Default",
+        todos: [],
     }
 ];
 
 class Project {
-    constructor(projectName, description, dueDate, priority) {
+    constructor(projectName) {
         this.name = projectName;
+        this.todos = [];
+        this.id = crypto.randomUUID()
     }
 }
 
 
-function addProjectToList(projectName) {
+function addProjectToList() {
     const newProject = document.querySelector("#new-project");
-
     const project = new Project(newProject.value);
-    project.id = crypto.randomUUID();
     projects.push(project)
     updateProjectListDrop();
-
-
-    // projectList.add(new Option(newProject.value, newProject.value))
-    // const newOption = document.createElement("option");
-    // newOption.value = newProject.value;
-    // newOption.textContent = newProject.value;
-
-    // projectList.appendChild(newOption);
-    // newProject.value = "";
+    updateProjectInLocalStorage(projects);
 };
 
 const projectList = document.querySelector("#project-list");
 const navBar = document.querySelector("nav");
 
-function addProjectToNavBar() {
+export function addProjectToNavBar() {
     navBar.replaceChildren();
     projects.forEach((item) => {
         const newButton = document.createElement("button");
@@ -57,10 +50,5 @@ const newProjectButton = document.querySelector("#new-project-button");
 newProjectButton.addEventListener("click", () => {
     addProjectToList();
     addProjectToNavBar();
+    console.log(projects);
 })
-
-export function groupToDosByProject(projects) {
-    projects.forEach((item) => {
-        item.todos = todos.filter(user => user.project == item.name)
-    })
-}

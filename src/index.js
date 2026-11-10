@@ -4,7 +4,10 @@ import "./todos-tracker.js"
 import "./projectsTracker.js";
 import { updateProjectListDrop } from "./projectsTracker.js";
 updateProjectListDrop();
-// import { toDo } from "./todos-tracker.js";
-// import { addToDoToList } from "./todos-tracker.js";
-// import { todos } from "./todos-tracker.js";
+import { getData } from "./localStorageTracker.js";
+
+
+// localStorage.clear();
+
+getData();
 

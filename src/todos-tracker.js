@@ -1,8 +1,7 @@
 import { projects } from "./projectsTracker.js";
-import { groupToDosByProject } from "./projectsTracker.js";
 import { displayToDoItems } from "./updateDisplay.js";
 import { currentView } from "./updateDisplay.js";
-export const todos = [];
+import { updateProjectInLocalStorage } from "./localStorageTracker.js";
 
 class toDo {
     constructor(title, description, dueDate, priority, project) {
@@ -10,14 +9,15 @@ class toDo {
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.project = project;
+        // this.project = project;
+        this.id = crypto.randomUUID();
     }
 };
 
-function addToDoToList(title, description, dueDate, priority, project) {
-    const toDoItem = new toDo(title, description, dueDate, priority, project);
-    toDoItem.id = crypto.randomUUID();
-    todos.push(toDoItem);
+function addToDoToProject(title, description, dueDate, priority, project) {
+    const toDoItem = new toDo(title, description, dueDate, priority);
+    const respectiveProject = projects.find(item => item.id === project.id);
+    respectiveProject.todos.push(toDoItem)
 }
 
 const form = document.querySelector(".form-container");
@@ -28,19 +28,20 @@ form.addEventListener("submit", (e) => {
     const entries = Object.fromEntries(data.entries());
     const objWithIdIndex = projects.findIndex((obj) => obj.id === entries["project-list"]);
 
-    addToDoToList(entries.title, entries.description, entries.date, entries.priority, projects[objWithIdIndex].name);
-    // displayToDoItems();
-    groupToDosByProject(projects);
+    addToDoToProject(entries.title, entries.description, entries.date, entries.priority, projects[objWithIdIndex]);
+    
     if (currentView == projects[objWithIdIndex].name) {
         displayToDoItems(projects[objWithIdIndex]);
     }
+    updateProjectInLocalStorage(projects);
 
 })
 
-export function removeObjectWithId(arr, id) {
-    const objWithIdIndex = arr.findIndex((obj) => obj.id === id);
+export function removeObjectWithId(currProject, id) {
+    const project = projects.find(item => item == currProject);
+    const objWithIdIndex = project.todos.findIndex((item) => item.id === id);
     if (objWithIdIndex !== -1) {
-        arr.splice(objWithIdIndex, 1);
+        project.todos.splice(objWithIdIndex, 1);
     }
 }
 

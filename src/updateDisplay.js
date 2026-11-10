@@ -1,5 +1,6 @@
 import { removeObjectWithId } from "./todos-tracker.js";
 import { projects } from "./projectsTracker.js";
+import { updateProjectInLocalStorage } from "./localStorageTracker.js";
 
 const myTable = document.getElementById("myTable");
 const tbody = myTable.createTBody();
@@ -7,9 +8,8 @@ export let currentView = "Default";
 
 const navBar = document.querySelector("nav");
 navBar.addEventListener("click", (e) => {
-    const project = projects.find(project => project.name === e.target.textContent);
+    const project = projects.find(project => project.id === e.target.id);
     currentView = project.name;
-
     displayToDoItems(project);
 })
 
@@ -48,8 +48,9 @@ export function displayToDoItems(project) {
 
 
         myDeleteButton.addEventListener('click', () => {
-            removeObjectWithId(todos, item.id)
+            removeObjectWithId(project, item.id)
             displayToDoItems(project);
+            updateProjectInLocalStorage(projects);
         });
 
         row.appendChild(cell6);
