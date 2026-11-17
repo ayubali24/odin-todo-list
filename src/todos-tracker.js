@@ -20,9 +20,9 @@ function addToDoToProject(title, description, dueDate, priority, project) {
     respectiveProject.todos.push(toDoItem)
 }
 
-const form = document.querySelector(".form-container");
+const newTaskFormContainer = document.querySelector(".new-task-form-container");
 
-form.addEventListener("submit", (e) => {
+newTaskFormContainer.addEventListener("submit", (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const entries = Object.fromEntries(data.entries());
@@ -34,7 +34,7 @@ form.addEventListener("submit", (e) => {
         displayToDoItems(projects[objWithIdIndex]);
     }
     updateProjectInLocalStorage(projects);
-
+    newTaskFormContainer.reset();
 })
 
 export function removeObjectWithId(currProject, id) {

@@ -45,10 +45,11 @@ export function updateProjectListDrop() {
     })
 }
 
-const newProjectButton = document.querySelector("#new-project-button");
+const newProjectFormContainer = document.querySelector(".new-project-form-container");
 
-newProjectButton.addEventListener("click", () => {
+newProjectFormContainer.addEventListener("submit", (e) => {
+    e.preventDefault();
     addProjectToList();
     addProjectToNavBar();
-    console.log(projects);
+    newProjectFormContainer.reset();
 })
