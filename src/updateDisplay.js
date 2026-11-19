@@ -5,24 +5,23 @@ import { updateProjectInLocalStorage } from "./localStorageTracker.js";
 const myTable = document.getElementById("myTable");
 const tbody = myTable.createTBody();
 
-let currentView;
-export function setCurrentView(id) {
-    const projectExists = projects.some(project => project.id === id);
+let currentProject;
+export function setCurrentProject(id) {
+    const projectExists = projects.find(project => project.id === id);
 
     if (!projectExists) return;
-
-    currentView = id;
+    currentProject = projectExists;
 }
 
-export const getCurrentView =  () => currentView;
+export const getCurrentView =  () => currentProject;
 
 const navBar = document.querySelector("nav");
 navBar.addEventListener("click", (e) => {
     const button = e.target.closest('button');
     if (!button) return;
-    const project = projects.find(project => project.id === button.id);
-    currentView = project.id;
-    displayToDoItems(project);
+    currentProject = projects.find(project => project.id === button.id);
+    displayToDoItems(currentProject);
+    newDisplay();
 })
 
 const dropdownBtn = document.querySelector(".dropbtn");
@@ -72,7 +71,8 @@ closeNewProjectPopup.addEventListener("click", () => {
 
 
 const displayTaskContainer = document.querySelector(".display-tasks-container");
-// const currentProject = projects.find(project => project.id === currentView);
+
+
 
 
 export function displayToDoItems(project) {
@@ -93,25 +93,48 @@ export function displayToDoItems(project) {
         cell3.textContent = item.dueDate;
         cell4.textContent = item.priority;
 
-        row.appendChild(cell1);
-        row.appendChild(cell2);
-        row.appendChild(cell3);
-        row.appendChild(cell4);
+        row.append(cell1, cell2, cell3, cell4)
+        // row.appendChild(cell1);
+        // row.appendChild(cell2);
+        // row.appendChild(cell3);
+        // row.appendChild(cell4);
         const myDeleteButton = document.createElement('button');
 
         myDeleteButton.innerText = "Delete Item";
 
         const cell5 = document.createElement("td");
-        cell5.appendChild(myDeleteButton);
+        cell5.append(myDeleteButton);
 
 
         myDeleteButton.addEventListener('click', () => {
             removeObjectWithId(project, item.id)
             displayToDoItems(project);
             updateProjectInLocalStorage(projects);
+            newDisplay();
         });
 
-        row.appendChild(cell5);
-        tbody.appendChild(row);
+        row.append(cell5);
+        tbody.append(row);
     }
+}
+
+const displayContainer = document.querySelector(".display-tasks-container")
+
+export function newDisplay() {
+    displayContainer.replaceChildren();
+    currentProject.todos.forEach(todo => {
+        const card = document.createElement("div");
+        card.classList = "card-body";
+
+        const title = document.createElement("h5");
+        const dueDate = document.createElement("h5");
+        title.textContent = todo.title;
+        dueDate.textContent = todo.dueDate;
+        card.append(title, dueDate);
+        console.log("before", card);
+        
+        console.log("after", card);
+
+        displayContainer.append(card)
+    });
 }

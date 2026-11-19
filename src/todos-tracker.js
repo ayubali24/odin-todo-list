@@ -1,5 +1,5 @@
 import { projects } from "./projectsTracker.js";
-import { displayToDoItems } from "./updateDisplay.js";
+import { displayToDoItems, newDisplay } from "./updateDisplay.js";
 import { getCurrentView } from "./updateDisplay.js";
 import { updateProjectInLocalStorage } from "./localStorageTracker.js";
 
@@ -30,13 +30,9 @@ newTaskFormContainer.addEventListener("submit", (e) => {
 
     addToDoToProject(entries.title, entries.description, entries.date, entries.priority, projects[objWithIdIndex]);
     
-    if (getCurrentView() == projects[objWithIdIndex].id) {
+    if (getCurrentView() == projects[objWithIdIndex]) {
         displayToDoItems(projects[objWithIdIndex]);
-    } else {
-
-        console.log(getCurrentView());
-        console.log(projects[objWithIdIndex].id);
-        console.log(projects);
+        newDisplay();
     }
     updateProjectInLocalStorage(projects);
     newTaskFormContainer.reset();
