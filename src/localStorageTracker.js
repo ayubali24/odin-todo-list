@@ -1,5 +1,5 @@
 import { addProjectToNavBar, projects } from "./projectsTracker.js";
-import { displayToDoItems } from "./updateDisplay.js";
+// import { displayToDoItems } from "./updateDisplay.js";
 import { updateProjectListDrop } from "./projectsTracker.js";
 export function updateProjectInLocalStorage(projects) {
     localStorage.setItem("Projects", JSON.stringify(projects));
@@ -14,10 +14,8 @@ export function getData() {
     projectsInLocalStroage.forEach((project) => {
         projects.push(project);
     })
-    displayToDoItems(projects[0]);
-    addProjectToNavBar();
-    updateProjectListDrop();
-    
-    console.log('here is my curr projects')
+    // displayToDoItems(projects[0]);
+    // addProjectToNavBar();
+    // updateProjectListDrop();
 }
 

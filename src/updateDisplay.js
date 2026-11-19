@@ -4,14 +4,24 @@ import { updateProjectInLocalStorage } from "./localStorageTracker.js";
 
 const myTable = document.getElementById("myTable");
 const tbody = myTable.createTBody();
-export let currentView = "Default";
+
+let currentView;
+export function setCurrentView(id) {
+    const projectExists = projects.some(project => project.id === id);
+
+    if (!projectExists) return;
+
+    currentView = id;
+}
+
+export const getCurrentView =  () => currentView;
 
 const navBar = document.querySelector("nav");
 navBar.addEventListener("click", (e) => {
     const button = e.target.closest('button');
     if (!button) return;
     const project = projects.find(project => project.id === button.id);
-    currentView = project.name;
+    currentView = project.id;
     displayToDoItems(project);
 })
 
@@ -59,6 +69,10 @@ newProjectBtn.addEventListener("click", () => {
 closeNewProjectPopup.addEventListener("click", () => {
     newProjectPopup.close();
 })
+
+
+const displayTaskContainer = document.querySelector(".display-tasks-container");
+// const currentProject = projects.find(project => project.id === currentView);
 
 
 export function displayToDoItems(project) {
