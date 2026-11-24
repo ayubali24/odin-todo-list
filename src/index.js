@@ -1,6 +1,6 @@
 import "./style.css";
 import "./todos-tracker.js"
-import {displayToDoItems, newDisplay } from "./updateDisplay.js";
+import {newDisplay } from "./updateDisplay.js";
 import "./projectsTracker.js";
 import { addProjectToNavBar, projects } from "./projectsTracker.js";
 import { updateProjectListDrop } from "./projectsTracker.js";
@@ -15,7 +15,6 @@ getData();
 setCurrentProject(projects[0].id);
 updateProjectListDrop();
 addProjectToNavBar();
-displayToDoItems(projects[0]);
 newDisplay();
 
 

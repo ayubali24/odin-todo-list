@@ -56,8 +56,18 @@
 }
 
 .card-body {
+    display: block;
+    width: 100%;
     font-size: 24px;
     text-align: center;
     border: 1px solid #e5e7eb;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.card-popup {
+    position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
 }
