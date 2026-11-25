@@ -17,9 +17,11 @@ class Project {
 }
 
 
-function addProjectToList() {
-    const newProject = document.querySelector("#new-project");
-    const project = new Project(newProject.value);
+function addProjectToList(e) {
+    const data = new FormData(e.target);
+    const entries = Object.fromEntries(data.entries());
+
+    const project = new Project(entries.project);
     projects.push(project)
     updateProjectListDrop();
     updateProjectInLocalStorage(projects);
@@ -45,11 +47,11 @@ export function updateProjectListDrop() {
     })
 }
 
-const newProjectFormContainer = document.querySelector(".new-project-form-container");
+const projectFormContainer = document.querySelector(".project-form-container");
 
-newProjectFormContainer.addEventListener("submit", (e) => {
+projectFormContainer.addEventListener("submit", (e) => {
     e.preventDefault();
-    addProjectToList();
+    addProjectToList(e);
     addProjectToNavBar();
-    newProjectFormContainer.reset();
+    projectFormContainer.reset();
 })

@@ -2,8 +2,13 @@ import { removeObjectWithId } from "./todos-tracker.js";
 import { projects } from "./projectsTracker.js";
 import { updateProjectInLocalStorage } from "./localStorageTracker.js";
 
-// const myTable = document.getElementById("myTable");
-// const tbody = myTable.createTBody();
+const formSubmitButton = document.getElementById("task-form-btn");
+const formTitle = document.getElementById("task-form-title");
+
+
+
+let formMode;
+export const getCurrentFormMode = () => formMode;
 
 let currentProject;
 export function setCurrentProject(id) {
@@ -13,6 +18,10 @@ export function setCurrentProject(id) {
     currentProject = projectExists;
 }
 
+let currentTodo;
+export const getCurrentTodo = () => currentTodo;
+
+
 export const getCurrentView =  () => currentProject;
 
 const navBar = document.querySelector("nav");
@@ -20,8 +29,7 @@ navBar.addEventListener("click", (e) => {
     const button = e.target.closest('button');
     if (!button) return;
     currentProject = projects.find(project => project.id === button.id);
-    // displayToDoItems(currentProject);
-    newDisplay();
+    updateDisplay();
 })
 
 const dropdownBtn = document.querySelector(".dropbtn");
@@ -44,116 +52,102 @@ window.onclick = function (event) {
 }
 
 const newTaskBtn = document.querySelector(".new-task-btn");
-const newTaskPopup = document.getElementById("new-task-popup");
-const closeNewTaskPopup = document.querySelector("#close-new-task-popup");
+const taskForm = document.getElementById("task-form");
+const closeTaskForm = document.querySelector("#close-task-form");
 
 newTaskBtn.addEventListener("click", () => {
-    newTaskPopup.showModal();
+    formMode = "add";
+    formTitle.textContent = "Add a New Task";
+    formSubmitButton.textContent = "Submit";
+
+    taskForm.showModal();
 })
 
-closeNewTaskPopup.addEventListener("click", () => {
-    newTaskPopup.close();
+closeTaskForm.addEventListener("click", () => {
+    taskForm.close();
 })
 
 const newProjectBtn = document.querySelector(".new-project-btn");
-const newProjectPopup = document.querySelector("#new-project-popup");
-const closeNewProjectPopup = document.querySelector("#close-new-project-popup");
+const projectForm = document.querySelector("#project-form");
+const closeProjectForm = document.querySelector("#close-project-form");
 
 
 
 newProjectBtn.addEventListener("click", () => {
-    newProjectPopup.showModal();
+    projectForm.showModal();
 })
 
-closeNewProjectPopup.addEventListener("click", () => {
-    newProjectPopup.close();
+closeProjectForm.addEventListener("click", () => {
+    projectForm.close();
 })
-
-
-const displayTaskContainer = document.querySelector(".display-tasks-container");
-
-
-
-
-// export function displayToDoItems(project) {
-//     const todos = project.todos;
-//     console.log(projects)
-//     tbody.replaceChildren();
-
-//     for (const item of todos) {
-//         const row = document.createElement("tr");
-
-//         const cell1 = document.createElement("td");
-//         const cell2 = document.createElement("td");
-//         const cell3 = document.createElement("td");
-//         const cell4 = document.createElement("td");
-
-//         cell1.textContent = item.title;
-//         cell2.textContent = item.description;
-//         cell3.textContent = item.dueDate;
-//         cell4.textContent = item.priority;
-
-//         row.append(cell1, cell2, cell3, cell4)
-//         // row.appendChild(cell1);
-//         // row.appendChild(cell2);
-//         // row.appendChild(cell3);
-//         // row.appendChild(cell4);
-//         const myDeleteButton = document.createElement('button');
-
-//         myDeleteButton.innerText = "Delete Item";
-
-//         const cell5 = document.createElement("td");
-//         cell5.append(myDeleteButton);
-
-
-//         myDeleteButton.addEventListener('click', () => {
-//             removeObjectWithId(project, item.id)
-//             displayToDoItems(project);
-//             updateProjectInLocalStorage(projects);
-//             newDisplay();
-//         });
-
-//         row.append(cell5);
-//         tbody.append(row);
-//     }
-// }
 
 const displayContainer = document.querySelector(".display-tasks-container")
 
-function openModal(todo) {
-    const dialog = document.getElementById("card-popup");
+function openFormModal(todo, project, projectId) {
+    const dialog = document.getElementById("task-card");
     dialog.replaceChildren();
     const title = document.createElement("h1");
+    const projectName = document.createElement("h1");
     const description = document.createElement("p");
     const dueDate = document.createElement("h2");
     const priority = document.createElement("h3");
 
+
     title.textContent = "Title:" + todo.title;
+    projectName.textContent = "Project: " + project;
     description.textContent = "Description: " + todo.description;
     dueDate.textContent = "Due Date: " + todo.dueDate;
     priority.textContent = "Priority: " + todo.priority;
-    const closeButton = document.createElement("button");
-    const deleteButton = document.createElement("button");
+
+    const closeTaskButton = document.createElement("button");
+    const deleteTaskButton = document.createElement("button");
+    const editTaskButton = document.createElement("button");
 
 
-    closeButton.textContent = "Close";
-    closeButton.addEventListener("click", () => {
+
+    closeTaskButton.textContent = "Close";
+    closeTaskButton.addEventListener("click", () => {
         dialog.close()
     })
 
-    deleteButton.textContent = "Delete";
-    deleteButton.addEventListener("click", () => {
+    deleteTaskButton.textContent = "Delete";
+    deleteTaskButton.addEventListener("click", () => {
         removeObjectWithId(getCurrentView(), todo.id);
-        newDisplay();
+        updateDisplay();
         updateProjectInLocalStorage(projects);
     })
 
-    dialog.append(title, description, dueDate, priority, closeButton, deleteButton);
+    editTaskButton.textContent = "Edit";
+    editTaskButton.addEventListener("click", (e) => {
+        currentTodo = todo;
+        dialog.close()
+
+        formMode = "edit";
+        const titleInput = document.querySelector("#title");
+        const descriptionInput = document.querySelector("#description");
+        const dateInput = document.querySelector("#dueDate");
+        const priorityInput = document.querySelector("#priority")
+        const projectInput = document.querySelector("#project-list");
+       
+        titleInput.value = todo.title;
+        descriptionInput.value = todo.description;
+        dateInput.value = todo.dueDate;
+        priorityInput.value = todo.priority;
+        projectInput.value = projectId;
+        formTitle.textContent = "Edit Task";
+
+        formSubmitButton.textContent = "Save Changes";
+
+        taskForm.showModal();
+
+    })
+
+    dialog.append(title, projectName, description, dueDate, priority, closeTaskButton, deleteTaskButton, editTaskButton);
     dialog.showModal();
 
 }
 
-export function newDisplay() {
+export function updateDisplay() {
     displayContainer.replaceChildren();
     currentProject.todos.forEach(todo => {
         const myCardButton = document.createElement("button");
@@ -169,7 +163,7 @@ export function newDisplay() {
         displayContainer.append(myCardButton);
 
         myCardButton.addEventListener("click", () => {
-            openModal(todo);
+            openFormModal(todo, currentProject.name, currentProject.id);
         })
     });
 }
